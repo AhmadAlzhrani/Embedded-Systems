@@ -1,0 +1,25 @@
+bsort
+			;		Arguments: R0 = Array location, R1 = Array size
+value		dcd		0x64, 0x32, -0xa, 0x1e, 0x46, 0x3c
+			LDR		R0, =value
+			ADD		R1,R1,#6
+bsort_next                      ; Check for a sorted array
+			MOV		R2,#0
+			MOV		R6,#0
+bsort_loop                      ; Start loop
+			ADD		R3,R2,#1
+			CMP		R3,R1               ; Check for the end of the array
+			BGE		bsort_check
+			LDR		R4,[R0,R2,LSL #2]
+			LDR		R5,[R0,R3,LSL #2]
+			CMP		R4,R5               ; Compare element values
+			STRGT	R5,[R0,R2,LSL #2]
+			STRGT	R4,[R0,R3,LSL #2]
+			ADDGT	R6,R6,#1
+			MOV		R2,R3
+			B		bsort_loop          ; End loop
+bsort_check
+			CMP		R6,#0
+			SUBGT	R1,R1,#1
+			BGT		bsort_next
+bsort_done
